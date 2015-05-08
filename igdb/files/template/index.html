@@ -1,0 +1,612 @@
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>IGDB</title>
+<link rel="stylesheet" type="text/css" media="all" href="style.css" />
+<link rel="stylesheet" type="text/css" href="style/css/media-queries.css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,300italic,300,700,700italic|Open+Sans+Condensed:300,700' rel="stylesheet" type='text/css'>
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="style/css/ie8.css" media="all" />
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="style/css/ie9.css" media="all" />
+<![endif]-->
+<script type="text/javascript" src="style/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="style/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="style/js/retina.js"></script>
+<script type="text/javascript" src="style/js/selectnav.js"></script>
+<script type="text/javascript" src="style/js/jquery.masonry.min.js"></script>
+<script type="text/javascript" src="style/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="style/js/jquery.backstretch.min.js"></script>
+<script type="text/javascript" src="style/js/jquery.dcflickr.1.0.js"></script>
+<script type="text/javascript" src="style/js/twitter.min.js"></script>
+<script type="text/javascript">
+	$.backstretch("style/images/bg/1.jpg");
+</script>
+</head>
+<head>
+<style>
+.main {
+    background: #aaa url(../images/bg.jpg) no-repeat;
+    width: 800px;
+    height: 600px;
+    margin: 50px auto;
+}
+.panel {
+    background-color: #444;
+    height: 34px;
+    padding: 10px;
+}
+.panel a#login_pop, .panel a#join_pop {
+    border: 2px solid #aaa;
+    color: #fff;
+    display: block;
+    float: right;
+    margin-right: 10px;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-shadow: 1px 1px #000;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+}
+a#login_pop:hover, a#join_pop:hover {
+    border-color: #eee;
+}
+.overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    cursor: default;
+    left: 0;
+    opacity: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    z-index: 1;
+
+    -webkit-transition: opacity .5s;
+    -moz-transition: opacity .5s;
+    -ms-transition: opacity .5s;
+    -o-transition: opacity .5s;
+    transition: opacity .5s;
+}
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+.popup {
+    background-color: #333366;
+    border: 3px solid #fff;
+    display: inline-block;
+    left: 50%;
+    opacity: 0;
+    padding: 15px;
+    position: fixed;
+    text-align: justify;
+    top: 40%;
+    visibility: hidden;
+    z-index: 10;
+
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+
+    -webkit-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -moz-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -ms-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -o-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+
+    -webkit-transition: opacity .5s, top .5s;
+    -moz-transition: opacity .5s, top .5s;
+    -ms-transition: opacity .5s, top .5s;
+    -o-transition: opacity .5s, top .5s;
+    transition: opacity .5s, top .5s;
+}
+.overlay:target+.popup {
+    top: 50%;
+    opacity: 1;
+    visibility: visible;
+}
+.close {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    text-decoration: none;
+    top: -15px;
+    width: 30px;
+
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    border-radius: 15px;
+}
+.close:before {
+    color: rgba(255, 255, 255, 0.9);
+    content: "X";
+    font-size: 24px;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+}
+.close:hover {
+    background-color: rgba(64, 128, 128, 0.8);
+}
+.popup p, .popup div {
+    margin-bottom: 10px;
+}
+.popup label {
+    display: inline-block;
+    text-align: left;
+    width: 120px;
+}
+.popup input[type="text"], .popup input[type="password"] {
+    border: 1px solid;
+    border-color: #999 #ccc #ccc;
+    margin: 0;
+    padding: 2px;
+
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+}
+.popup input[type="text"]:hover, .popup input[type="password"]:hover {
+    border-color: #555 #888 #888;
+}
+div.transbox
+  {
+  
+  height:250px;
+  
+  background-color:#000000;
+  border:1px solid black;
+  opacity:0.8;
+  filter:alpha(opacity=80); /* For IE8 and earlier */
+  
+  }
+div.transbox p
+  {
+  margin:30px 40px;
+  font-weight:bold;
+  color:#ffffff;
+  
+  }
+div.transbox1
+  {
+  
+  height:600px;
+  
+  background-color:#000000;
+  border:1px solid black;
+  opacity:0.8;
+  filter:alpha(opacity=80); /* For IE8 and earlier */
+  
+  }
+div.transbox1 p
+  {
+  margin:30px 40px;
+  font-weight:bold;
+  color:#ffffff;
+  
+  }
+  div.transbox2
+  {
+  margin:0px 450px;
+  height:25px;
+  width:95px;
+  background-color:#000000;
+  border:1px solid black;
+  opacity:0.8;
+  filter:alpha(opacity=80); /* For IE8 and earlier */
+  
+  }
+div.transbox2 p
+  {
+  
+  
+  font-weight:bold;
+  color:#ffffff;
+  
+  }
+a:link {color:white;}
+</style>
+</head>
+<head>
+<style>
+.thumbnail {
+    float: left;
+    
+    margin: 5px;
+}
+</style>
+</head>
+
+
+<body class="single">
+<div class="scanlines"></div>
+
+<!-- Begin Header -->
+<div class="header-wrapper opacity">
+	<div class="header">
+		<!-- Begin Logo -->
+		<div class="logo">
+		    <a href="index.html">
+				<h1>IGDB </h1>
+			</a>
+	    </div>
+		<!-- End Logo -->
+		<!-- Begin Menu -->
+		<div id="menu-wrapper">
+			<div id="menu" class="menu">
+				<ul id="tiny">
+					<li class="active"><a href="index.html">Home</a>
+						
+					</li>
+					<li><a href="page-with-sidebar.html">Updates</a>
+						<ul>
+							<li><a href="page-with-sidebar.html">what to play next?</a></li>
+							<li><a href="full-width.html">News</a></li>
+						</ul>
+						
+					<li><a href="typography.html">About Us</a>
+						
+					</li>
+					<li><a href="contact.html">Contact</a></li>
+					<li><a href="contact.html">Help |</a>
+					<ul>
+							<li><a href="page-with-sidebar.html">FAQ</a></li>
+							</ul>
+							</li>
+				
+				
+			
+                <li><a href="#login_form" id="login_pop">Login</a>
+				<ul>
+							<li><a href="register.html">Register</a></li>
+							<li><a href="#login_form" id="login_pop">Login</a></li>
+						</ul>
+                
+            
+		
+
+        <!-- popup form #1 -->
+        <a href="#x" class="overlay" id="login_form"></a>
+        <div class="popup">
+            <h2>Sign in to IGDB</h2>
+            <p>By creating an account or signing in,</p><p> you agree to IGDB's Conditions of Use and Privacy Policy.</p>
+            <div>
+                <label for="login">Username</label>
+                <input type="text" id="login" value="" />
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" value="" />
+            </div>
+            <input type="button" value="Log In" />
+			<p></p>
+			<p><a href="">Forgot your password?</a></p>
+
+            <a class="close" href="#close"></a>
+        </div>
+
+        
+		</li>					
+					
+					
+		</div>
+		
+        </div>
+		<div class="clear"></div>
+		<!-- End Menu -->
+		</div>
+</div>
+<!-- End Header -->
+
+<!-- Begin Wrapper -->
+<div class="wrapper"><!-- Begin Intro -->
+<div class="intro">Here you get all the latest updates, reviews and all the other information related to any pc game </div>
+<ul class="social">
+<li><a class="rss" href="#"></a></li><li><a class="facebook" href="#"></a></li><li><a class="twitter" href="#"></a></li><li><a class="pinterest" href="#"></a></li><li><a class="dribbble" href="#"></a></li><li><a class="flickr" href="#"></a></li><li><a class="linkedin" href="#"></a></li></ul><!-- End Intro --> 
+<h2>Most Recent</h2>
+<!-- Begin Blog Grid -->
+<div class="blog-wrap">
+	<!-- Begin Blog -->
+	<div class="blog-grid">
+		<!-- Begin Image Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+					<img src="style/images/art/post1.jpg" alt="" />
+				</a>
+			</div>
+			<h2 class="title"><a href="post.html">FIFA 15</a></h2>
+			<blockquote>For the first time ever, players will show emotion based on the context of the match. With over 600 new emotional reactions, players now respond to pivotal moments on the pitch > bad tackles, missed chances, epic goals - as they would in real life.</blockquote>
+			<div class="details">
+				<span class="icon-image"><a href="#">September 26, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">44</a></span>
+				<span class="comments"><a href="#">3</a></span>
+			</div>
+		</div>
+		<!-- End Image Format -->
+
+ 	
+		<!-- Begin Quote Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+				<img src="style/images/art/post-5.jpg" alt="" />	
+				</a>
+			</div> 
+			<h2 class="title"><a href="post.html">Dragon Age Inquisition</a></h2>
+			<blockquote>A cataclysmic event plunges the land of Thedas into turmoil. Dragons darken the sky, casting a shadow over lands on the brink of chaos. Mages break into all-out war against the oppressive templars. Nations rise against one another. It falls to you and your allies to restore order as you lead the Inquisition and hunt down the agents of chaos.
+Explore, lead, and battle: Tough choices define your experience, and even one decision can change the course of what's to come</blockquote>	
+			
+			<div class="details">
+				<span class="icon-quote"><a href="#">September 21, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">27</a></span>
+				<span class="comments"><a href="#">4</a></span>
+			</div>
+			
+		</div>
+		
+		<!-- End Quote Format --> 	
+
+
+		<!-- Begin Video Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+				<img src="style/images/art/post-6.jpg" alt="" />	
+				</a>
+			</div>
+			<h2 class="title"><a href="post.html">Mortal Kombat X</a></h2>
+			<blockquote>The game is said to include a new, original and non-linear storyline "showcasing some of the game's oldest characters including Scorpion and Sub-Zero, while introducing new challengers that represent the forces of good and evil that tie the tale together.</blockquote>
+		
+			<div class="details">
+				<span class="icon-video"><a href="#">September 13, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">18</a></span>
+				<span class="comments"><a href="#">1</a></span>
+			</div>
+			
+		</div>
+		<!-- End Video Format --> 					
+
+
+		<!-- Begin Audio Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+					<img src="style/images/art/post-7.jpg" alt="" />
+				</a>
+			</div>
+			<h2 class="title"><a href="post.html">Metal Gear Solid V: The Phantom Pain</a></h2>
+			
+			<blockquote>The game will serve as a sequel to Metal Gear Solid V: Ground Zeroes and a continuation of the narrative established there, and will carry over the same tagline of Tactical Espionage Operations first used in Metal Gear Solid: Peace Walker. Set in 1984, the game follows the mercenary leader Venom Snake as he ventures into Africa and Afghanistan during the Soviet war to exact revenge on the people who destroyed his forces and nearly himself during the post-events of Ground Zeroes.</blockquote>
+			<div class="details">
+				<span class="icon-audio"><a href="#">September 7, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">20</a></span>
+				<span class="comments"><a href="#">1</a></span>
+			</div>
+	
+		</div>
+		<!-- End Audio Format -->  					
+
+			
+ 		<!-- Begin Standard Format -->
+ 		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+					<img src="style/images/art/post-2.jpg" alt="" />
+				</a>
+			</div>
+			
+			<h2 class="title"><a href="post.html">Assassin's Creed Victory</a></h2>
+			<blockquote>This new entry in Ubisoft's annual open-world action series, slated for release in the fall of 2015, will take us through the dirty back alleys and rattling stagecoaches of London during the Victorian era, a historical period that fans have wanted to see in an Assassin's Creed game for quite some time now. This new Assassin's Creed game is called or code-named Victory?like Victorian!?and it will be out next year for PS4, Xbox One, and PC, according to a person familiar with the game.</blockquote>
+	
+			<div class="details">
+				<span class="icon-standard"><a href="#">August 13, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">11</a></span>
+				<span class="comments"><a href="#">0</a></span>
+			</div>
+	
+		</div>
+		<!-- End Standard Format --> 					
+
+
+		<!-- Begin Link Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+					<img src="style/images/art/post-3.jpg" alt="" />
+				</a>
+			</div> 
+
+			<h2 class="title"><a href="http://elemisfreebies.com" target="_blank">Far Cry 4</a></h2>
+			<blockquote>Far Cry 4 offers a variety of weapons, including sidearms, shot guns, assault and sniper rifles, and heavy weapons such as machine guns and rocket launchers. These can be purchased at stores throughout the game world, or taken from fallen enemies. Weapons can be customised and upgraded to improve performance, and the completion of side-quests will unlock "signature" weapons, one-of-a-kind high-performance variations of stock models. The player is initially limited in the number of weapons that they can carry and the amount of ammunition that they can hold.</blockquote>
+			<blockquote>The game world is divided into two halves, North and South Kyrat. The player starts in South Kyrat, and is free to explore almost immediately, but can only unlock North Kyrat over the course of the story. The map is progressively opened up by liberating bell towers, freeing them from Pagan Min's influence and allowing the Golden Path to expand. The player will also encounter outposts, or enemy checkpoints that need to be captured by eliminating all soldiers. Four larger outposts, or fortresses, can also be found, featuring stronger defences and more difficult combinations of enemies. Liberating bell towers and clearing outposts will unlock further side-quests including escort missions, hostage rescues and hunting missions.<blockquote>
+			
+			<div class="details">
+				<span class="icon-link"><a href="#">July 13, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">10</a></span>
+				<span class="comments"><a href="#">0</a></span>
+			</div>
+		
+		</div>
+		<!-- End Link Format --> 					
+
+
+		<!-- Begin Chat Format -->
+		<div class="post format-image box"> 
+			<div class="frame">
+				<a href="post.html">
+					<img src="style/images/art/post-4.jpg" alt="" />
+				</a>
+			</div>
+			<h2 class="title"><a href="post.html">Battlefield Hardline</a></h2>
+			<blockquote>Battlefield Hardline features new variety of gameplay that breaks away from the traditional Battlefield game modes. The focus of the game has been shifted to police and the "war on crime", breaking away from the military setting that has hitherto characterized the series. As such, the main factions in Hardline are the police Special Response Units and criminals..</blockquote>
+		
+			<div class="details">
+				<span class="icon-chat"><a href="#">June 13, 2012</a></span>
+				<span class="likes"><a href="#" class="likeThis">5</a></span>
+				<span class="comments"><a href="#">0</a></span>
+			</div>
+			
+		</div>
+		<!-- End Chat Format -->
+		
+ 	
+ 	</div>
+	<!-- End Blog -->
+</div>
+<!-- End Blog Grid -->
+<h2>Top Rated Of All Time</h2>
+<div class="transbox">
+<a class="texthover" href=" " title="Dark Souls 2" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img class="thumbnail" src="style/images/art/t1.jpg" width="242" height="240"></a>
+<a class="texthover" href=" " title="Modern Warfare 2" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img class="thumbnail" src="style/images/art/t2.jpg" width="242" height="240"></a>
+<a class="texthover" href=" " title="GTA Vice City" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img class="thumbnail" src="style/images/art/t3.jpg" width="242" height="240"></a>	
+<a class="texthover" href=" " title="Mario" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img class="thumbnail" src="style/images/art/t4.jpg" width="242" height="240"></a>
+
+</div>
+<br>
+<h2>Critics choice</h2>
+<div class="transbox1">
+<h4>Best of Show: Evolve</h4><img class="thumbnail" src="style/images/art/c1.jpg" width="500" height="550">
+<img class="thumbnail" src="style/images/art/c2.jpg" width="180" height="150">
+<h4>Best Original Game: No Man's Sky </h4>
+
+<p>No Man's Sky is a game about exploration and survival in an infinite procedurally generated galaxy.</p>
+<br>
+<br>
+<img class="thumbnail" src="style/images/art/c3.jpg" width="180" height="150">
+<h4>Best PC Game: Tom Clancy's Rainbow Six: Siege </h4>
+<p>Tom Clancy's Rainbow Six Siege is an upcoming first-person shooter video game under development by Ubisoft Montreal.</p>
+<br>
+<img class="thumbnail" src="style/images/art/c4.jpeg" width="180" height="150">
+<h4>Best Racing Game: The Crew </h4>
+<p>The Crew is a revolutionary action-driving game developed. It takes you and your friends on a reckless ride inside a massive, open-world recreation of the United States</p>
+</div>
+<br>
+<!-- Begin Page-navi -->
+    	<div class="transbox2">
+				<ul>
+					<h4><a href="index.html">1 </a>|
+						
+					
+					<a href="page-with-sidebar.html">2 </a>|
+						
+					
+					<a href="typography.html">3 </a>|
+						
+					
+					
+					<a href="contact.html">4</a></h4>
+				</ul>
+			</div>
+		
+      <!-- 
+			<div class="nav-next"><a href="#" ><span class="meta-nav-next">Newer posts &rarr;</span></a></div>
+			 --> 
+    </div>
+    <!-- End Page-navi --> 
+
+</div>
+<!-- End Wrapper -->
+
+<!-- Begin Footer -->
+<div class="footer-wrapper">
+<div id="footer" class="four">
+		<div id="first" class="widget-area">
+			<div class="widget widget_search">
+			
+				<h3 class="widget-title">Search</h3>
+				<form class="searchform" method="get" action="#">
+				
+					<input type="text" name="s" value="type and hit enter" onFocus="this.value=''" onBlur="this.value='type and hit enter'"/>
+				</form>
+			</div>
+			
+		</div><!-- #first .widget-area -->
+		<div id="second" class="widget-area">
+		<div id="example-widget-3" class="widget example">
+			<h3 class="widget-title">Popular Posts</h3>
+					<p></p>
+			  		<div class="frame">
+			  			<a class="texthover" href=" " title="FIFA 15" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img src="style/images/art/s1.jpg" width="225dp" height="100dp" /></a>
+			  		</div>
+					<div class="meta">
+					    <h6><a href="#">FIFA 15</a></h6>
+					    <em>28th Sep 2012</em>
+				    </div>
+				
+			
+		</div>
+		</div><!-- #second .widget-area -->
+	
+		<div id="third" class="widget-area">
+			<div id="twitter-2" class="widget widget_twitter">
+			<br>
+			<br>
+					<div class="frame">
+			  			<a class="texthover" href=" " title="Dragon Age Inquisition" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img src="style/images/art/s2.jpg" width="225dp" height="100dp" /></a>
+			  		</div>
+					<div class="meta">
+					    <h6><a href="#">Dragon Age Inquisition</a></h6>
+					    <em>5th Sep 2012</em>
+				    </div>
+			</div>
+		</div><!-- #third .widget-area -->
+	
+		
+		
+		<div id="fourth" class="widget-area">
+		<div class="widget">
+		<br>
+		<br>
+			<div class="frame">
+			
+			  			<a class="texthover" href=" " title="Mortal Kombat X" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><img src="style/images/art/s3.jpg" width="225dp" height="100dp"/></a>
+			  		</div>
+					<div class="meta">
+					    <h6><a href="#">Mortal Kombat X</a></h6>
+					    <em>5th Sep 2012</em>
+				    </div>
+			
+		</div>
+		</div><!-- #fourth .widget-area -->
+	</div>
+</div>
+<div class="site-generator-wrapper">
+	<div class="site-generator">Copyright Obscura 2012. Design by <a href="http://elemisfreebies.com">elemis</a>. All rights reserved.</div>
+</div>
+<!-- End Footer --> 
+<script type="text/javascript" src="style/js/scripts.js"></script>
+</body>
+</html>
